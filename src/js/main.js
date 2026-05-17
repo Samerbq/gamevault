@@ -2,12 +2,13 @@
 // DOM manipulation: select, manipulate, events (Technical req 1A-C)
 // Modern JS: constants, arrow functions, template literals, etc. (req 2A-J)
 
-import { fetchGames, fetchGameDetail, fetchGenres, fetchPlatforms } from './api.js';
+import { fetchGames, fetchGameDetail, fetchGenres, fetchPlatforms, fetchGameMovies } from './api.js';
 import {
   renderGrid,
   renderTable,
   renderSkeletons,
   renderDetailModal,
+  injectTrailer,
   renderFavoritesPanel,
   populateSelect,
   showToast,
@@ -27,7 +28,7 @@ const state = {
     genres: '',
     parent_platforms: '',
     dates: '',       // "YYYY-MM-DD,YYYY-MM-DD"
-    ordering: '-rating',
+    ordering: '-added',
     rating: 0,
   },
 };
@@ -89,9 +90,7 @@ const setView = (mode) => {
 
 const updateFavBadge = () => {
   const count = getFavorites().length;
-  // Template literal (req 2B)
   favCount.textContent = `${count}`;
-  favCount.classList.toggle('hidden', count === 0);
 };
 
 const showLoading = (initial = false) => {
@@ -211,7 +210,11 @@ const openDetail = async (id) => {
   document.body.style.overflow = 'hidden';
 
   try {
-    const game = await fetchGameDetail(id);
+    // Fetch game detail and trailers in parallel (Promises req 2H)
+    const [game, moviesData] = await Promise.all([
+      fetchGameDetail(id),
+      fetchGameMovies(id).catch(() => ({ results: [] })),
+    ]);
     modalContent.innerHTML = renderDetailModal(game);
 
     // DOM: attach event to the favorite button inside the modal (req 1C)
@@ -219,6 +222,9 @@ const openDetail = async (id) => {
     if (detailFavBtn) {
       detailFavBtn.addEventListener('click', () => handleFavToggle(game, detailFavBtn));
     }
+
+    // Inject trailer if available
+    injectTrailer(moviesData.results ?? []);
   } catch (err) {
     modalContent.innerHTML = `<p style="color:var(--danger);padding:24px">${err.message}</p>`;
   }
@@ -278,6 +284,13 @@ const updateFavButtons = (id) => {
 // ─── Event delegation: card clicks ───────────────────────────────────────────
 // DOM: events attached to elements (req 1C)
 const handleGameAreaClick = async (e) => {
+  // Adult overlay reveal — stop propagation so card detail doesn't open
+  const adultOverlay = e.target.closest('[data-adult-overlay]');
+  if (adultOverlay) {
+    adultOverlay.remove();
+    return;
+  }
+
   const favBtn = e.target.closest('.card-fav-btn');
   const detailBtn = e.target.closest('.open-detail-btn');
   const nameBtn = e.target.closest('.table-name');
@@ -373,7 +386,8 @@ clearFilters.addEventListener('click', () => {
   ratingValue.textContent = 'Any';
   searchInput.value = '';
   searchError.textContent = '';
-  state.filters = { search: '', genres: '', parent_platforms: '', dates: '', ordering: state.filters.ordering, rating: 0 };
+  state.filters = { search: '', genres: '', parent_platforms: '', dates: '', ordering: '-added', rating: 0 };
+  sortSelect.value = '-added';
   loadGames();
 });
 
@@ -406,6 +420,21 @@ favoritesBtn.addEventListener('click', openFavorites);
 closeFavoritesBtn.addEventListener('click', closeFavorites);
 favoritesOverlay.addEventListener('click', (e) => {
   if (e.target === favoritesOverlay) closeFavorites();
+});
+
+// Logo click → reset to home (clear search + filters, reload)
+document.querySelector('.nav-brand').addEventListener('click', () => {
+  searchInput.value = '';
+  searchError.textContent = '';
+  genreFilter.value = '';
+  platformFilter.value = '';
+  yearFrom.value = '';
+  yearTo.value = '';
+  ratingFilter.value = 0;
+  ratingValue.textContent = 'Any';
+  state.filters = { search: '', genres: '', parent_platforms: '', dates: '', ordering: '-added', rating: 0 };
+  sortSelect.value = '-added';
+  loadGames();
 });
 
 // Keyboard: close modal/panel on Escape

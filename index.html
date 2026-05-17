@@ -16,11 +16,6 @@
     <!-- ===== NAVBAR ===== -->
     <nav class="navbar">
       <div class="nav-brand">
-        <svg class="brand-icon" viewBox="0 0 24 24" fill="currentColor">
-          <path
-            d="M7.97 16L5 19c-.67.67-1.41.7-1.41.7H2v-2h1.5L6 15.03 7.97 16zm13.03-7c0 2.76-2.24 5-5 5-.34 0-.67-.04-1-.1l-1.41 1.41c.75.44 1.55.69 2.41.69 2.76 0 5-2.24 5-5h-1zm-1 0c0 2.21-1.79 4-4 4-.26 0-.51-.03-.75-.07L16.93 11l-1.41-1.41L14 11.11c-.04-.24-.07-.49-.07-.75 0-2.21 1.79-4 4-4s4 1.79 4 4zM10 5c2.76 0 5 2.24 5 5h-1c0-2.21-1.79-4-4-4V5zm0 1c2.21 0 4 1.79 4 4 0 .26-.03.51-.07.75l-1.51 1.51c-.24.04-.49.07-.75.07-.26 0-.51-.03-.75-.07L9.46 10.8C9.02 10.16 8.5 9.13 8.5 8c0-2.21 1.79-4 4-4V4c-2.76 0-5 2.24-5 5 0 2.43 1.72 4.44 4 4.9V14h-1v2h4v-2h-1v-4.1c2.28-.46 4-2.47 4-4.9 0-2.76-2.24-5-5-5z"
-          />
-        </svg>
         <span class="brand-name">GameVault</span>
       </div>
 
@@ -52,7 +47,6 @@
             />
           </svg>
           Favorites
-          <span class="badge" id="favCount">0</span>
         </button>
       </div>
     </nav>
@@ -130,13 +124,14 @@
           </div>
           <div class="toolbar-center">
             <select id="sortSelect" class="filter-select">
+              <option value="-added" selected>Popularity</option>
+              <option value="-metacritic">Metacritic: High to Low</option>
               <option value="-rating">Rating: High to Low</option>
               <option value="rating">Rating: Low to High</option>
               <option value="-released">Newest First</option>
               <option value="released">Oldest First</option>
               <option value="name">Name: A &rarr; Z</option>
               <option value="-name">Name: Z &rarr; A</option>
-              <option value="-metacritic">Metacritic: High to Low</option>
             </select>
           </div>
           <div class="toolbar-right">
@@ -189,7 +184,7 @@
                 <th>Genres</th>
                 <th>Platforms</th>
                 <th class="sortable" data-col="-metacritic">Metacritic</th>
-                <th>Playtime</th>
+                <th>Playtime (HLTB)</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -223,6 +218,7 @@
               />
             </svg>
             My Favorites
+            <span class="badge" id="favCount" style="margin-left:6px">0</span>
           </h2>
           <button class="btn btn-ghost btn-icon" id="closeFavoritesBtn" aria-label="Close panel">
             &times;

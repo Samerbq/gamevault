@@ -37,3 +37,6 @@ export const fetchGenres = () => apiFetch(buildUrl('/genres'));
 
 // Fetch parent platforms for filter dropdown
 export const fetchPlatforms = () => apiFetch(buildUrl('/platforms/lists/parents'));
+
+// Fetch trailers/clips for a game (may be empty for many games)
+export const fetchGameMovies = (id) => apiFetch(buildUrl(`/games/${id}/movies`));

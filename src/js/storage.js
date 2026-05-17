@@ -3,7 +3,7 @@ const PREFS_KEY = 'gamevault_preferences';
 
 const DEFAULT_PREFS = {
   viewMode: 'grid',   // 'grid' | 'list'
-  ordering: '-rating',
+  ordering: '-added',
 };
 
 export const getPrefs = () => {

@@ -1,25 +1,25 @@
-/* ===== CSS CUSTOM PROPERTIES (dark theme) ===== */
+/* ===== CSS CUSTOM PROPERTIES (black & white theme) ===== */
 :root {
-  --bg-primary: #0d1117;
-  --bg-secondary: #161b22;
-  --bg-card: #1c2128;
-  --bg-hover: #21262d;
-  --bg-modal: #161b22;
+  --bg-primary: #050505;
+  --bg-secondary: #0f0f0f;
+  --bg-card: #161616;
+  --bg-hover: #1e1e1e;
+  --bg-modal: #0f0f0f;
 
-  --accent: #a855f7;
-  --accent-dim: rgba(168, 85, 247, 0.15);
-  --accent-hover: #9333ea;
-  --purple: #f97316;
-  --purple-dim: rgba(249, 115, 22, 0.2);
+  --accent: #ffffff;
+  --accent-dim: rgba(255, 255, 255, 0.08);
+  --accent-hover: #e0e0e0;
+  --purple: #777777;
+  --purple-dim: rgba(119, 119, 119, 0.2);
 
-  --text-primary: #e6edf3;
-  --text-secondary: #8b949e;
-  --text-muted: #484f58;
+  --text-primary: #f0f0f0;
+  --text-secondary: #888888;
+  --text-muted: #444444;
 
-  --border: #30363d;
-  --border-hover: #484f58;
+  --border: #2a2a2a;
+  --border-hover: #3f3f3f;
 
-  --rating-gold: #f5a623;
+  --rating-gold: #ffffff;
   --success: #3fb950;
   --danger: #f85149;
   --warning: #d29922;
@@ -111,6 +111,8 @@ a {
   flex-shrink: 0;
   text-decoration: none;
   color: var(--text-primary);
+  cursor: pointer;
+  user-select: none;
 }
 
 .brand-icon {
@@ -119,10 +121,11 @@ a {
   color: var(--accent);
 }
 
+
 .brand-name {
   font-size: 1.2rem;
   font-weight: 700;
-  background: linear-gradient(135deg, var(--accent), var(--purple));
+  background: linear-gradient(135deg, #ffffff, #777777);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -207,7 +210,7 @@ a {
   background: var(--accent-hover);
   border-color: var(--accent-hover);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.15);
 }
 
 .btn-ghost {
@@ -654,6 +657,16 @@ a {
   to   { transform: translateX(0);    opacity: 1; }
 }
 @keyframes fadeOut { to { opacity: 0; transform: translateX(40px); } }
+
+/* ===== REMOVE NUMBER INPUT SPINNERS ===== */
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type='number'] {
+  -moz-appearance: textfield;
+}
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {

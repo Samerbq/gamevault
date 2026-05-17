@@ -1,6 +1,18 @@
 // DOM manipulation: select, manipulate, render (Technical req 1A-C)
 import { isFavorite } from './favorites.js';
 
+// ─── Adult content detection ──────────────────────────────────────────────────
+// Check title for explicit words first (most reliable for list view)
+const ADULT_TITLE_WORDS = ['porn', 'xxx', 'hentai', 'eroge', 'lewd'];
+// Only tag slugs that are 100% explicit — not "nudity" (catches legit games like Persona)
+const ADULT_TAG_SLUGS = ['hentai', 'eroge', 'nsfw', 'pornography'];
+
+const isAdultContent = (game) => {
+  const title = (game.name ?? '').toLowerCase();
+  if (ADULT_TITLE_WORDS.some((w) => title.includes(w))) return true;
+  return (game.tags ?? []).some((t) => ADULT_TAG_SLUGS.includes(t.slug));
+};
+
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
 // Ternary operator for conditional class (req 2F)
@@ -60,6 +72,7 @@ export const buildGameCard = (game) => {
   const fav = isFavorite(game.id);
   const coverUrl = game.background_image ?? '';
   const year = releaseYear(game.released);
+  const adult = isAdultContent(game);
 
   const card = document.createElement('article');
   card.className = 'game-card';
@@ -72,6 +85,12 @@ export const buildGameCard = (game) => {
         ? `<img class="card-cover" data-src="${coverUrl}" alt="${game.name} cover" loading="lazy" />`
         : `<div class="card-cover-placeholder">🎮</div>`
     }
+    ${adult ? `
+    <div class="adult-overlay" data-adult-overlay>
+      <span class="adult-overlay-icon">🔞</span>
+      <span class="adult-overlay-text">Adult content</span>
+      <button class="adult-overlay-btn">Click to reveal</button>
+    </div>` : ''}
     <button class="card-fav-btn ${fav ? 'is-favorite' : ''}" data-id="${game.id}" title="${fav ? 'Remove from favorites' : 'Add to favorites'}" aria-label="Toggle favorite">
       ${heartIcon}
     </button>
@@ -109,8 +128,6 @@ export const buildTableRow = (game) => {
   const metacritic = game.metacritic
     ? `<span class="metacritic-badge ${metacriticClass(game.metacritic)}">${game.metacritic}</span>`
     : '—';
-  const playtime = game.playtime ? `~${game.playtime}h` : '—';
-
   const tr = document.createElement('tr');
   tr.dataset.id = game.id;
 
@@ -128,7 +145,7 @@ export const buildTableRow = (game) => {
     <td>${genres}</td>
     <td><div class="table-platforms">${buildPlatformTags(game.platforms ?? [])}</div></td>
     <td>${metacritic}</td>
-    <td>${playtime}</td>
+    <td><a href="https://howlongtobeat.com/?q=${encodeURIComponent(game.name)}" target="_blank" rel="noopener" style="color:var(--accent);font-size:0.8rem">HLTB ↗</a></td>
     <td>
       <div class="table-actions">
         <button class="btn btn-ghost btn-sm card-fav-btn ${fav ? 'is-favorite' : ''}" data-id="${game.id}" title="Toggle favorite">${heartIcon}</button>
@@ -202,7 +219,9 @@ export const renderDetailModal = (game) => {
       </div>
       <div class="detail-info-block">
         <div class="detail-info-label">Playtime</div>
-        <div class="detail-info-value">${game.playtime ? `~${game.playtime} hours` : 'N/A'}</div>
+        <div class="detail-info-value">
+          <a href="https://howlongtobeat.com/?q=${encodeURIComponent(game.name)}" target="_blank" rel="noopener" style="color:var(--accent);font-size:0.875rem">View on HowLongToBeat ↗</a>
+        </div>
       </div>
       <div class="detail-info-block">
         <div class="detail-info-label">Genres</div>
@@ -220,7 +239,25 @@ export const renderDetailModal = (game) => {
 
     ${description ? `<p class="detail-description">${description}</p>` : ''}
 
-    ${tags ? `<div><div class="detail-info-label" style="margin-bottom:8px">Tags</div><div class="detail-tags">${tags}</div></div>` : ''}`;
+    ${tags ? `<div><div class="detail-info-label" style="margin-bottom:8px">Tags</div><div class="detail-tags">${tags}</div></div>` : ''}
+    <div id="trailerContainer"></div>`;
+};
+
+// ─── Inject trailer into open modal ──────────────────────────────────────────
+export const injectTrailer = (movies) => {
+  const container = document.getElementById('trailerContainer');
+  if (!container || !movies.length) return;
+  // Array method: find first movie with a video URL (req 2D)
+  const clip = movies.find((m) => m.data?.max || m.data?.['480']);
+  if (!clip) return;
+  const videoUrl = clip.data.max || clip.data['480'];
+  container.innerHTML = `
+    <div class="trailer-section">
+      <div class="trailer-label">Trailer</div>
+      <video class="trailer-video" controls preload="none" poster="${clip.preview ?? ''}">
+        <source src="${videoUrl}" type="video/mp4" />
+      </video>
+    </div>`;
 };
 
 // ─── Favorites Panel ──────────────────────────────────────────────────────────

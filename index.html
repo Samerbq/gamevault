@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GameVault &mdash; Discover Your Next Game</title>
+    <link rel="stylesheet" href="/src/css/main.css" />
+    <link rel="stylesheet" href="/src/css/components.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar">
+      <div class="nav-brand">
+        <svg class="brand-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M7.97 16L5 19c-.67.67-1.41.7-1.41.7H2v-2h1.5L6 15.03 7.97 16zm13.03-7c0 2.76-2.24 5-5 5-.34 0-.67-.04-1-.1l-1.41 1.41c.75.44 1.55.69 2.41.69 2.76 0 5-2.24 5-5h-1zm-1 0c0 2.21-1.79 4-4 4-.26 0-.51-.03-.75-.07L16.93 11l-1.41-1.41L14 11.11c-.04-.24-.07-.49-.07-.75 0-2.21 1.79-4 4-4s4 1.79 4 4zM10 5c2.76 0 5 2.24 5 5h-1c0-2.21-1.79-4-4-4V5zm0 1c2.21 0 4 1.79 4 4 0 .26-.03.51-.07.75l-1.51 1.51c-.24.04-.49.07-.75.07-.26 0-.51-.03-.75-.07L9.46 10.8C9.02 10.16 8.5 9.13 8.5 8c0-2.21 1.79-4 4-4V4c-2.76 0-5 2.24-5 5 0 2.43 1.72 4.44 4 4.9V14h-1v2h4v-2h-1v-4.1c2.28-.46 4-2.47 4-4.9 0-2.76-2.24-5-5-5z"
+          />
+        </svg>
+        <span class="brand-name">GameVault</span>
+      </div>
+
+      <form class="search-form" id="searchForm" novalidate>
+        <input
+          type="text"
+          id="searchInput"
+          class="search-input"
+          placeholder="Search games..."
+          autocomplete="off"
+          minlength="2"
+          maxlength="100"
+        />
+        <button type="submit" class="btn btn-primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.35-4.35" />
+          </svg>
+          Search
+        </button>
+        <span class="search-error" id="searchError"></span>
+      </form>
+
+      <div class="nav-actions">
+        <button class="btn btn-ghost" id="favoritesBtn">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+            />
+          </svg>
+          Favorites
+          <span class="badge" id="favCount">0</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- ===== MAIN LAYOUT ===== -->
+    <div class="app-layout">
+      <!-- Sidebar Filters -->
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <h3>Filters</h3>
+          <button class="btn btn-ghost btn-sm" id="clearFilters">Clear all</button>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label" for="genreFilter">Genre</label>
+          <select id="genreFilter" class="filter-select">
+            <option value="">All genres</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label" for="platformFilter">Platform</label>
+          <select id="platformFilter" class="filter-select">
+            <option value="">All platforms</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">Release Year</label>
+          <div class="year-range">
+            <input
+              type="number"
+              id="yearFrom"
+              class="filter-input"
+              placeholder="From"
+              min="1970"
+              max="2025"
+            />
+            <span class="year-sep">&mdash;</span>
+            <input
+              type="number"
+              id="yearTo"
+              class="filter-input"
+              placeholder="To"
+              min="1970"
+              max="2025"
+            />
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label" for="ratingFilter">
+            Min Rating: <span id="ratingValue">Any</span>
+          </label>
+          <input
+            type="range"
+            id="ratingFilter"
+            min="0"
+            max="5"
+            step="0.5"
+            value="0"
+            class="filter-range"
+          />
+        </div>
+
+        <button class="btn btn-primary btn-block" id="applyFilters">Apply Filters</button>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <!-- Toolbar -->
+        <div class="toolbar">
+          <div class="toolbar-left">
+            <span id="resultsCount" class="results-count"></span>
+          </div>
+          <div class="toolbar-center">
+            <select id="sortSelect" class="filter-select">
+              <option value="-rating">Rating: High to Low</option>
+              <option value="rating">Rating: Low to High</option>
+              <option value="-released">Newest First</option>
+              <option value="released">Oldest First</option>
+              <option value="name">Name: A &rarr; Z</option>
+              <option value="-name">Name: Z &rarr; A</option>
+              <option value="-metacritic">Metacritic: High to Low</option>
+            </select>
+          </div>
+          <div class="toolbar-right">
+            <div class="view-toggle" role="group" aria-label="View mode">
+              <button class="view-btn active" id="gridViewBtn" title="Grid view" data-view="grid">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M3 3h8v8H3zm10 0h8v8h-8zM3 13h8v8H3zm10 0h8v8h-8z"
+                  />
+                </svg>
+              </button>
+              <button class="view-btn" id="listViewBtn" title="List view" data-view="list">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M3 4h18v2H3zm0 7h18v2H3zm0 7h18v2H3z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Loading State -->
+        <div class="loading-container" id="loadingState">
+          <div class="spinner"></div>
+          <p>Loading games&hellip;</p>
+        </div>
+
+        <!-- Error State -->
+        <div class="error-container hidden" id="errorState">
+          <svg viewBox="0 0 24 24" fill="currentColor" class="error-icon">
+            <path
+              d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+            />
+          </svg>
+          <p class="error-message" id="errorMessage">Something went wrong.</p>
+          <button class="btn btn-primary" id="retryBtn">Try Again</button>
+        </div>
+
+        <!-- Games Grid View -->
+        <div class="games-grid hidden" id="gamesGrid"></div>
+
+        <!-- Games Table View -->
+        <div class="games-table-wrapper hidden" id="gamesTableWrapper">
+          <table class="games-table">
+            <thead>
+              <tr>
+                <th>Cover</th>
+                <th class="sortable" data-col="name">Name</th>
+                <th class="sortable" data-col="-rating">Rating</th>
+                <th class="sortable" data-col="-released">Released</th>
+                <th>Genres</th>
+                <th>Platforms</th>
+                <th class="sortable" data-col="-metacritic">Metacritic</th>
+                <th>Playtime</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="gamesTableBody"></tbody>
+          </table>
+        </div>
+
+        <!-- Infinite scroll / load more trigger -->
+        <div id="loadMoreTrigger" class="load-more-trigger">
+          <div class="spinner hidden" id="loadMoreSpinner"></div>
+        </div>
+      </main>
+    </div>
+
+    <!-- ===== GAME DETAIL MODAL ===== -->
+    <div class="modal-overlay hidden" id="modalOverlay" role="dialog" aria-modal="true">
+      <div class="modal" id="gameModal">
+        <button class="modal-close" id="modalClose" aria-label="Close">&times;</button>
+        <div id="modalContent" class="modal-body"></div>
+      </div>
+    </div>
+
+    <!-- ===== FAVORITES PANEL ===== -->
+    <div class="panel-overlay hidden" id="favoritesOverlay">
+      <div class="panel" id="favoritesPanel" role="complementary" aria-label="Favorites">
+        <div class="panel-header">
+          <h2>
+            <svg viewBox="0 0 24 24" fill="currentColor" style="width:20px;height:20px">
+              <path
+                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+              />
+            </svg>
+            My Favorites
+          </h2>
+          <button class="btn btn-ghost btn-icon" id="closeFavoritesBtn" aria-label="Close panel">
+            &times;
+          </button>
+        </div>
+        <div id="favoritesList" class="favorites-list"></div>
+      </div>
+    </div>
+
+    <!-- Toast notifications -->
+    <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+    <script type="module" src="/src/js/main.js"></script>
+  </body>
+</html>

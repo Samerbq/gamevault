@@ -79,14 +79,14 @@ Async & Await          →  src/js/api.js      apiFetch() / fetchGames()
 Observer API           →  src/js/observers.js  IntersectionObserver — lazy loading + infinite scroll
 ```
 
-$\color{green}{\texttt{3. Data \& API}}$
+$\color{green}{\texttt{3. Data and API}}$
 
 ```
 Fetch                  →  src/js/api.js      apiFetch()
 JSON manipulation      →  src/js/api.js      response.json() — rendered in ui.js
 ```
 
-$\color{green}{\texttt{4. Storage \& Validation}}$
+$\color{green}{\texttt{4. Storage and Validation}}$
 
 ```
 Form validation        →  src/js/main.js     validateSearch()
@@ -94,7 +94,7 @@ LocalStorage           →  src/js/favorites.js  ( favorites )
                        →  src/js/storage.js    ( user preferences )
 ```
 
-$\color{green}{\texttt{5. Styling \& Layout}}$
+$\color{green}{\texttt{5. Styling and Layout}}$
 
 ```
 Flexbox + CSS Grid     →  src/css/main.css   .games-grid / .app-layout / .toolbar

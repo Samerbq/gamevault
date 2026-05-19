@@ -102,7 +102,7 @@ CSS                    →  src/css/main.css + components.css
 User-friendly elements →  remove buttons / heart toggle icons / toast notifications
 ```
 
-$\color{green}{\texttt{6. Tooling \& Structure}}$
+$\color{green}{\texttt{6. Tooling and Structure}}$
 
 ```
 Vite                   →  vite.config.js / package.json

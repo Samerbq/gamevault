@@ -1,4 +1,6 @@
-A dark mode game discovery single page application built with vanilla JavaScript ( and the RAWG video games database API : https://rawg.io/apidocs )
+A dark mode game discovery single page application built with vanilla JavaScript 
+
+( and the RAWG video games database API : https://rawg.io/apidocs )
 
 
 \- \- \-

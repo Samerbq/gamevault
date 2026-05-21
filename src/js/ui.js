@@ -1,10 +1,13 @@
-// DOM manipulation: select, manipulate, render (Technical req 1A-C)
+// hier tonen we data op het scherm
+
+
 import { isFavorite } from './favorites.js';
 
-// ─── Adult content detection ──────────────────────────────────────────────────
-// Check title for explicit words first (most reliable for list view)
+// adult content detection ( is een zeer belangrijke functie ! ik tolereer geen ongepaste inhoud in mijn app en ook om dit gebruiker vriendelijk te maken voor iedereen ! ) 
+// later kan ik zelf een functie toevoegen om age verification te doen voordat de gebruiker deze inhoud kan zien als ik hier ooit verder aan zel werken : ) 
+
+
 const ADULT_TITLE_WORDS = ['porn', 'xxx', 'hentai', 'eroge', 'lewd'];
-// Only tag slugs that are 100% explicit — not "nudity" (catches legit games like Persona)
 const ADULT_TAG_SLUGS = ['hentai', 'eroge', 'nsfw', 'pornography'];
 
 const isAdultContent = (game) => {
@@ -13,32 +16,24 @@ const isAdultContent = (game) => {
   return (game.tags ?? []).some((t) => ADULT_TAG_SLUGS.includes(t.slug));
 };
 
-// ─── Helpers ────────────────────────────────────────────────────────────────
-
-// Ternary operator for conditional class (req 2F)
 const metacriticClass = (score) =>
   score >= 75 ? 'meta-green' : score >= 50 ? 'meta-yellow' : 'meta-red';
 
 const starIcon = `<svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`;
 const heartIcon = `<svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`;
 
-// Format date string to readable year
 const releaseYear = (dateStr) => (dateStr ? dateStr.slice(0, 4) : 'N/A');
 
-// Truncate text with ellipsis
 const truncate = (str, max) => (str && str.length > max ? `${str.slice(0, max)}…` : str ?? '');
 
-// Strip HTML tags from description (RAWG returns HTML)
 const stripHtml = (html) => {
   const div = document.createElement('div');
   div.innerHTML = html ?? '';
   return div.textContent || '';
 };
 
-// ─── Skeleton loaders ────────────────────────────────────────────────────────
 
 export const renderSkeletons = (container, count = 20) => {
-  // Template literals (req 2B) + array iteration (req 2C)
   container.innerHTML = Array.from({ length: count })
     .map(
       () => `
@@ -53,10 +48,8 @@ export const renderSkeletons = (container, count = 20) => {
     .join('');
 };
 
-// ─── Game Card (grid view) ────────────────────────────────────────────────────
 
 const buildGenreTags = (genres) =>
-  // Array method: map + slice (req 2D)
   genres
     .slice(0, 3)
     .map((g) => `<span class="genre-tag">${g.name}</span>`)
@@ -67,7 +60,6 @@ const buildMetacriticBadge = (score) =>
     ? `<span class="metacritic-badge ${metacriticClass(score)}" title="Metacritic">MC ${score}</span>`
     : '';
 
-// Template literal for full card HTML (req 2B)
 export const buildGameCard = (game) => {
   const fav = isFavorite(game.id);
   const coverUrl = game.background_image ?? '';
@@ -113,7 +105,6 @@ export const buildGameCard = (game) => {
   return card;
 };
 
-// ─── Game Table Row ───────────────────────────────────────────────────────────
 
 const buildPlatformTags = (platforms) =>
   platforms
@@ -156,9 +147,6 @@ export const buildTableRow = (game) => {
   return tr;
 };
 
-// ─── Render lists ─────────────────────────────────────────────────────────────
-
-// DOM manipulation: element manipulation (req 1B)
 export const renderGrid = (games, container, append = false) => {
   if (!append) container.innerHTML = '';
 
@@ -172,7 +160,6 @@ export const renderGrid = (games, container, append = false) => {
     return;
   }
 
-  // Array method: forEach (req 2D)
   games.forEach((game) => container.appendChild(buildGameCard(game)));
 };
 
@@ -187,7 +174,7 @@ export const renderTable = (games, tbody, append = false) => {
   games.forEach((game) => tbody.appendChild(buildTableRow(game)));
 };
 
-// ─── Game Detail Modal ────────────────────────────────────────────────────────
+// bij deze gedeelte heb ik Ai ook voor wat hulp moeten vragen omdat ik hier echt moeite mee had om dit goed in elkaar te krijgen ( half werkte wel de andere helft niet echt maar claude heeft me geholpen met andere helft )
 
 export const renderDetailModal = (game) => {
   const fav = isFavorite(game.id);
@@ -196,8 +183,6 @@ export const renderDetailModal = (game) => {
   const genres = (game.genres ?? []).map((g) => g.name).join(', ') || 'N/A';
   const tags = (game.tags ?? []).slice(0, 10).map((t) => `<span class="detail-tag">${t.name}</span>`).join('');
   const esrb = game.esrb_rating?.name ?? 'Not Rated';
-
-  // Template literal (req 2B)
   return `
     ${game.background_image ? `<img class="detail-hero" src="${game.background_image}" alt="${game.name}" />` : ''}
     <div class="detail-header">
@@ -239,28 +224,9 @@ export const renderDetailModal = (game) => {
 
     ${description ? `<p class="detail-description">${description}</p>` : ''}
 
-    ${tags ? `<div><div class="detail-info-label" style="margin-bottom:8px">Tags</div><div class="detail-tags">${tags}</div></div>` : ''}
-    <div id="trailerContainer"></div>`;
+    ${tags ? `<div><div class="detail-info-label" style="margin-bottom:8px">Tags</div><div class="detail-tags">${tags}</div></div>` : ''}`;
 };
 
-// ─── Inject trailer into open modal ──────────────────────────────────────────
-export const injectTrailer = (movies) => {
-  const container = document.getElementById('trailerContainer');
-  if (!container || !movies.length) return;
-  // Array method: find first movie with a video URL (req 2D)
-  const clip = movies.find((m) => m.data?.max || m.data?.['480']);
-  if (!clip) return;
-  const videoUrl = clip.data.max || clip.data['480'];
-  container.innerHTML = `
-    <div class="trailer-section">
-      <div class="trailer-label">Trailer</div>
-      <video class="trailer-video" controls preload="none" poster="${clip.preview ?? ''}">
-        <source src="${videoUrl}" type="video/mp4" />
-      </video>
-    </div>`;
-};
-
-// ─── Favorites Panel ──────────────────────────────────────────────────────────
 
 export const renderFavoritesPanel = (favorites, container, onRemove) => {
   if (favorites.length === 0) {
@@ -272,7 +238,6 @@ export const renderFavoritesPanel = (favorites, container, onRemove) => {
     return;
   }
 
-  // Array method: map to build HTML, then join (req 2D)
   container.innerHTML = favorites
     .map(
       (game) => `
@@ -291,7 +256,6 @@ export const renderFavoritesPanel = (favorites, container, onRemove) => {
     )
     .join('');
 
-  // DOM: attach remove event listeners (req 1C)
   container.querySelectorAll('.fav-remove').forEach((btn) => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -300,22 +264,16 @@ export const renderFavoritesPanel = (favorites, container, onRemove) => {
   });
 };
 
-// ─── Toast notifications ──────────────────────────────────────────────────────
-
 export const showToast = (message, type = 'default') => {
   const container = document.getElementById('toastContainer');
   const toast = document.createElement('div');
   toast.className = `toast ${type}`;
   toast.textContent = message;
   container.appendChild(toast);
-  // Auto-remove after animation (3 seconds)
   setTimeout(() => toast.remove(), 3100);
 };
 
-// ─── Filter dropdowns ─────────────────────────────────────────────────────────
-
 export const populateSelect = (select, items, valueKey, labelKey) => {
-  // Array method: forEach to build options (req 2D)
   items.forEach((item) => {
     const opt = document.createElement('option');
     opt.value = item[valueKey];

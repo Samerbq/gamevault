@@ -1,4 +1,7 @@
-/* ===== GAME CARD (grid view) ===== */
+/* game card grid view */
+/* style van kaarten - tabel en modal */
+
+
 .game-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -22,7 +25,9 @@
   outline-offset: 2px;
 }
 
-/* Cover image */
+/* cover image */
+
+
 .card-cover {
   width: 100%;
   aspect-ratio: 16 / 9;
@@ -51,7 +56,8 @@
   font-size: 2rem;
 }
 
-/* Favorite button on card */
+/* favorite button card */
+
 .card-fav-btn {
   position: absolute;
   top: 8px;
@@ -92,7 +98,8 @@
   fill: var(--danger);
 }
 
-/* Card body */
+/* card body */ 
+
 .card-body {
   padding: 12px;
   display: flex;
@@ -108,6 +115,7 @@
   line-height: 1.3;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -174,7 +182,8 @@
   white-space: nowrap;
 }
 
-/* ===== ADULT CONTENT OVERLAY ===== */
+/* adult content overlay ! is een belangrijke  */
+
 .adult-overlay {
   position: absolute;
   inset: 0;
@@ -219,29 +228,10 @@
   color: var(--accent);
 }
 
-/* ===== GAME TRAILER ===== */
-.trailer-section {
-  margin-top: 20px;
-}
 
-.trailer-label {
-  font-size: 0.72rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: var(--text-muted);
-  margin-bottom: 10px;
-}
+/* games table */
 
-.trailer-video {
-  width: 100%;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border);
-  background: #000;
-  max-height: 320px;
-}
 
-/* ===== GAMES TABLE ===== */
 .games-table-wrapper {
   overflow-x: auto;
   border: 1px solid var(--border);
@@ -346,7 +336,8 @@
   gap: 6px;
 }
 
-/* ===== GAME DETAIL MODAL CONTENT ===== */
+/* game detail modal content */
+
 .detail-hero {
   width: calc(100% + 48px);
   margin: -24px -24px 24px;
@@ -480,7 +471,8 @@
   color: var(--text-secondary);
 }
 
-/* ===== FAVORITE ITEM (in panel) ===== */
+/* favorite item in panel */
+
 .fav-item {
   display: flex;
   align-items: center;
@@ -558,7 +550,8 @@
   opacity: 0.3;
 }
 
-/* ===== SKELETON LOADING ===== */
+/* skeleton loading */
+
 .skeleton {
   background: linear-gradient(
     90deg,
@@ -605,7 +598,8 @@
   width: 50%;
 }
 
-/* ===== EMPTY STATE ===== */
+/* empty state */
+
 .empty-state {
   display: flex;
   flex-direction: column;

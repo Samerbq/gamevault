@@ -1,14 +1,13 @@
-// App entry point — ties all modules together
-// DOM manipulation: select, manipulate, events (Technical req 1A-C)
-// Modern JS: constants, arrow functions, template literals, etc. (req 2A-J)
+// het hart van de app bij wijze van spreken : ) ( alles is samengebracht ) 
 
-import { fetchGames, fetchGameDetail, fetchGenres, fetchPlatforms, fetchGameMovies } from './api.js';
+// bij deze gedeelde werd ik wel geholpen van Ai om een goede prestatie te hebben op mijn website en wil deze namelijk nog later gebruiken en zelfs beter maken om dit te hebben op mijn public github ( claude )
+
+import { fetchGames, fetchGameDetail, fetchGenres, fetchPlatforms } from './api.js';
 import {
   renderGrid,
   renderTable,
   renderSkeletons,
   renderDetailModal,
-  injectTrailer,
   renderFavoritesPanel,
   populateSelect,
   showToast,
@@ -17,7 +16,8 @@ import { getFavorites, isFavorite, toggleFavorite } from './favorites.js';
 import { getPrefs, savePref } from './storage.js';
 import { setupLazyImages, setupInfiniteScroll } from './observers.js';
 
-// ─── App state (constants, req 2A) ───────────────────────────────────────────
+// app state 
+
 const state = {
   games: [],
   currentPage: 1,
@@ -27,13 +27,14 @@ const state = {
     search: '',
     genres: '',
     parent_platforms: '',
-    dates: '',       // "YYYY-MM-DD,YYYY-MM-DD"
+    dates: '',                   // "YYYY-MM-DD,YYYY-MM-DD  -> op deze manier had ik het gevraagd aan Ai en dat werkt goed voor de api"
     ordering: '-added',
     rating: 0,
   },
 };
 
-// ─── DOM element selection (req 1A) ─────────────────────────────────────────
+// dom elements selectie
+
 const $ = (id) => document.getElementById(id);
 
 const searchForm      = $('searchForm');
@@ -69,18 +70,21 @@ const favoritesOverlay = $('favoritesOverlay');
 const closeFavoritesBtn = $('closeFavoritesBtn');
 const favoritesList   = $('favoritesList');
 
-// ─── View mode (from persisted prefs) ────────────────────────────────────────
+// view mode 
+
+
 let viewMode = getPrefs().viewMode; // 'grid' | 'list'
 let scrollObserver = null;
 
-// ─── Utility ─────────────────────────────────────────────────────────────────
+// utility ( lol geen grenades )
 
-// DOM manipulation: manipulate elements (req 1B)
+// dom manipulation
+
+
 const setView = (mode) => {
   viewMode = mode;
   savePref('viewMode', mode);
 
-  // Ternary operator (req 2F)
   gamesGrid.classList.toggle('hidden', mode !== 'grid');
   gamesTableWrapper.classList.toggle('hidden', mode !== 'list');
 
@@ -104,7 +108,7 @@ const hideLoading = () => {
   loadMoreSpinner.classList.add('hidden');
 };
 
-// ─── Search form validation (Technical req 4A) ────────────────────────────────
+
 const validateSearch = (value) => {
   if (value.length === 1) {
     searchError.textContent = 'Enter at least 2 characters.';
@@ -114,13 +118,11 @@ const validateSearch = (value) => {
   return true;
 };
 
-// ─── Build API params from current state ─────────────────────────────────────
 const buildParams = (page = 1) => {
   const p = {
     page,
     ordering: state.filters.ordering,
   };
-  // Conditional params (req 2F ternary / truthy checks)
   if (state.filters.search)           p.search = state.filters.search;
   if (state.filters.genres)           p.genres = state.filters.genres;
   if (state.filters.parent_platforms) p.parent_platforms = state.filters.parent_platforms;
@@ -129,7 +131,7 @@ const buildParams = (page = 1) => {
   return p;
 };
 
-// ─── Render current game list to active view ─────────────────────────────────
+
 const renderGames = (games, append = false) => {
   if (viewMode === 'grid') {
     renderGrid(games, gamesGrid, append);
@@ -139,7 +141,7 @@ const renderGames = (games, append = false) => {
   setupLazyImages(); // Observer API (req 2J)
 };
 
-// ─── Load (first page) ───────────────────────────────────────────────────────
+
 const loadGames = async () => {
   if (state.isLoading) return;
   state.isLoading = true;
@@ -149,14 +151,14 @@ const loadGames = async () => {
   showLoading(true);
   renderSkeletons(gamesGrid);
   gamesGrid.classList.remove('hidden');
-  gamesTableWrapper.classList.add('hidden'); // hide table during skeleton
+  gamesTableWrapper.classList.add('hidden'); // hide table during skeleton yeah . . 
 
   try {
-    const data = await fetchGames(buildParams(1)); // async/await (req 2I), Promises (req 2H)
+    const data = await fetchGames(buildParams(1)); 
     state.games = data.results;
     state.hasNextPage = Boolean(data.next);
 
-    setView(viewMode); // restore correct view
+    setView(viewMode); 
 
     if (state.games.length === 0) {
       gamesGrid.classList.remove('hidden');
@@ -165,7 +167,6 @@ const loadGames = async () => {
 
     renderGames(state.games, false);
 
-    // Template literal for count display (req 2B)
     resultsCount.innerHTML = `Showing <strong>${state.games.length}</strong> of <strong>${data.count.toLocaleString()}</strong> games`;
   } catch (err) {
     console.error(err);
@@ -180,7 +181,6 @@ const loadGames = async () => {
   }
 };
 
-// ─── Load next page (infinite scroll) ───────────────────────────────────────
 const loadMore = async () => {
   if (state.isLoading || !state.hasNextPage) return;
   state.isLoading = true;
@@ -190,9 +190,9 @@ const loadMore = async () => {
 
   try {
     const data = await fetchGames(buildParams(state.currentPage));
-    state.games.push(...data.results);      // array spread (req 2C)
+    state.games.push(...data.results); 
     state.hasNextPage = Boolean(data.next);
-    renderGames(data.results, true);        // append = true
+    renderGames(data.results, true);       
     setupLazyImages();
     resultsCount.innerHTML = `Showing <strong>${state.games.length}</strong> of <strong>${data.count.toLocaleString()}</strong> games`;
   } catch (err) {
@@ -203,28 +203,20 @@ const loadMore = async () => {
   }
 };
 
-// ─── Game detail modal ───────────────────────────────────────────────────────
+// game detail modal
 const openDetail = async (id) => {
   modalContent.innerHTML = '<div style="padding:40px;text-align:center"><div class="spinner"></div></div>';
   modalOverlay.classList.remove('hidden');
   document.body.style.overflow = 'hidden';
 
   try {
-    // Fetch game detail and trailers in parallel (Promises req 2H)
-    const [game, moviesData] = await Promise.all([
-      fetchGameDetail(id),
-      fetchGameMovies(id).catch(() => ({ results: [] })),
-    ]);
+    const game = await fetchGameDetail(id);
     modalContent.innerHTML = renderDetailModal(game);
 
-    // DOM: attach event to the favorite button inside the modal (req 1C)
     const detailFavBtn = modalContent.querySelector('.detail-fav-btn');
     if (detailFavBtn) {
       detailFavBtn.addEventListener('click', () => handleFavToggle(game, detailFavBtn));
     }
-
-    // Inject trailer if available
-    injectTrailer(moviesData.results ?? []);
   } catch (err) {
     modalContent.innerHTML = `<p style="color:var(--danger);padding:24px">${err.message}</p>`;
   }
@@ -235,7 +227,6 @@ const closeModal = () => {
   document.body.style.overflow = '';
 };
 
-// ─── Favorites panel ─────────────────────────────────────────────────────────
 const openFavorites = () => {
   refreshFavoritesPanel();
   favoritesOverlay.classList.remove('hidden');
@@ -257,11 +248,10 @@ const refreshFavoritesPanel = () => {
   });
 };
 
-// ─── Favorite toggle (used from card, table, and modal) ──────────────────────
 const handleFavToggle = (game, btn) => {
   const nowFav = toggleFavorite(game);
   updateFavBadge();
-  // Update button appearance immediately (DOM manipulation req 1B)
+
   btn.classList.toggle('is-favorite', nowFav);
   if (btn.classList.contains('detail-fav-btn')) {
     btn.innerHTML = `${heartIcon} ${nowFav ? 'In Favorites' : 'Add to Favorites'}`;
@@ -269,10 +259,9 @@ const handleFavToggle = (game, btn) => {
   showToast(nowFav ? `Added "${game.name}" to favorites` : `Removed from favorites`, nowFav ? 'success' : 'danger');
 };
 
-// Heart icon SVG (re-used in detail toggle)
+// heart icon ( is een svg die ik zelf heb gemaakt )
 const heartIcon = `<svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`;
 
-// Sync all visible heart buttons for a given game id after toggle
 const updateFavButtons = (id) => {
   const numId = Number(id);
   const isFav = isFavorite(numId);
@@ -281,10 +270,8 @@ const updateFavButtons = (id) => {
   });
 };
 
-// ─── Event delegation: card clicks ───────────────────────────────────────────
-// DOM: events attached to elements (req 1C)
+
 const handleGameAreaClick = async (e) => {
-  // Adult overlay reveal — stop propagation so card detail doesn't open
   const adultOverlay = e.target.closest('[data-adult-overlay]');
   if (adultOverlay) {
     adultOverlay.remove();
@@ -299,7 +286,6 @@ const handleGameAreaClick = async (e) => {
   if (favBtn) {
     e.stopPropagation();
     const id = Number(favBtn.dataset.id);
-    // Find game from state (array method: find, req 2D)
     const game = state.games.find((g) => g.id === id) ?? { id };
     handleFavToggle(game, favBtn);
     updateFavButtons(id);
@@ -318,24 +304,18 @@ const handleGameAreaClick = async (e) => {
   }
 };
 
-// ─── Populate filter dropdowns ───────────────────────────────────────────────
 const initFilters = async () => {
   try {
-    // Fetch genres and platforms in parallel (Promises, req 2H)
     const [genresData, platformsData] = await Promise.all([fetchGenres(), fetchPlatforms()]);
     populateSelect(genreFilter, genresData.results, 'slug', 'name');
     populateSelect(platformFilter, platformsData.results, 'id', 'name');
   } catch {
-    // Non-critical — filters just won't have options
   }
 };
 
-// ─── Filter application ───────────────────────────────────────────────────────
 const applyFilterValues = () => {
   state.filters.genres = genreFilter.value;
   state.filters.parent_platforms = platformFilter.value;
-
-  // Build date range string for RAWG (req 2B template literal)
   const from = yearFrom.value;
   const to   = yearTo.value;
   state.filters.dates = from && to ? `${from}-01-01,${to}-12-31` : '';
@@ -344,9 +324,6 @@ const applyFilterValues = () => {
   loadGames();
 };
 
-// ─── Event listeners (DOM req 1C) ─────────────────────────────────────────────
-
-// Search submit — includes form validation (req 4A)
 searchForm.addEventListener('submit', (e) => {
   e.preventDefault();
   const val = searchInput.value.trim();
@@ -355,28 +332,25 @@ searchForm.addEventListener('submit', (e) => {
   loadGames();
 });
 
-// Live rating label update
+
 ratingFilter.addEventListener('input', () => {
   const v = parseFloat(ratingFilter.value);
-  // Ternary (req 2F)
   ratingValue.textContent = v > 0 ? `${v}+` : 'Any';
 });
 
-// Sort order change
+// is een sort order change 
+
 sortSelect.addEventListener('change', () => {
   state.filters.ordering = sortSelect.value;
   savePref('ordering', sortSelect.value);
   loadGames();
 });
 
-// View toggle
 gridViewBtn.addEventListener('click', () => setView('grid'));
 listViewBtn.addEventListener('click', () => setView('list'));
 
-// Apply filters button
 applyFilters.addEventListener('click', applyFilterValues);
 
-// Clear all filters
 clearFilters.addEventListener('click', () => {
   genreFilter.value = '';
   platformFilter.value = '';
@@ -391,10 +365,8 @@ clearFilters.addEventListener('click', () => {
   loadGames();
 });
 
-// Retry on error
 retryBtn.addEventListener('click', loadGames);
 
-// Table column header sort click
 document.querySelector('.games-table thead').addEventListener('click', (e) => {
   const th = e.target.closest('th.sortable');
   if (!th) return;
@@ -405,24 +377,20 @@ document.querySelector('.games-table thead').addEventListener('click', (e) => {
   loadGames();
 });
 
-// Event delegation on game containers (req 1C)
 gamesGrid.addEventListener('click', handleGameAreaClick);
 gamesTableBody.addEventListener('click', handleGameAreaClick);
 
-// Modal close
 modalClose.addEventListener('click', closeModal);
 modalOverlay.addEventListener('click', (e) => {
   if (e.target === modalOverlay) closeModal();
 });
 
-// Favorites panel
 favoritesBtn.addEventListener('click', openFavorites);
 closeFavoritesBtn.addEventListener('click', closeFavorites);
 favoritesOverlay.addEventListener('click', (e) => {
   if (e.target === favoritesOverlay) closeFavorites();
 });
 
-// Logo click → reset to home (clear search + filters, reload)
 document.querySelector('.nav-brand').addEventListener('click', () => {
   searchInput.value = '';
   searchError.textContent = '';
@@ -437,7 +405,6 @@ document.querySelector('.nav-brand').addEventListener('click', () => {
   loadGames();
 });
 
-// Keyboard: close modal/panel on Escape
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     closeModal();
@@ -445,7 +412,6 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-// ─── Restore persisted preferences ───────────────────────────────────────────
 const restorePrefs = () => {
   const prefs = getPrefs();
   // Restore sort preference
@@ -456,15 +422,12 @@ const restorePrefs = () => {
   setView(prefs.viewMode);
 };
 
-// ─── Initialise ───────────────────────────────────────────────────────────────
 const init = async () => {
   restorePrefs();
   updateFavBadge();
 
-  // Parallel init (Promises, req 2H)
   await Promise.all([initFilters(), loadGames()]);
 
-  // IntersectionObserver for infinite scroll (req 2J)
   scrollObserver = setupInfiniteScroll(loadMoreTrigger, loadMore);
 };
 

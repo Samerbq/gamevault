@@ -1,14 +1,14 @@
-// Storage & validation: LocalStorage for user preferences (Technical req 4B)
+// onthoudt je settings ( ook LocalStorage )
+
 const PREFS_KEY = 'gamevault_preferences';
 
 const DEFAULT_PREFS = {
-  viewMode: 'grid',   // 'grid' | 'list'
+  viewMode: 'grid', 
   ordering: '-added',
 };
 
 export const getPrefs = () => {
   const stored = localStorage.getItem(PREFS_KEY);
-  // Array methods: spread to merge defaults (req 2D)
   return stored ? { ...DEFAULT_PREFS, ...JSON.parse(stored) } : { ...DEFAULT_PREFS };
 };
 

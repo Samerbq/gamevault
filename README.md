@@ -115,13 +115,14 @@ Folder structure       →  html in root / css + js separated inside src/
 $\color{green}{\texttt{Screenshots}}$
 
 ```
-Grid view — browse games with cover art, ratings and genres
+grid view — browse games with cover art - ratings and genres
 ```
 
 ![GameVault grid view](public/screenshot1.png)
 
 ```
-Detail modal — game info, metacritic score, playtime link and description
+detail modal — game info - metacritic score - playtime link and description
+
 ```
 
 ![GameVault detail modal](public/screenshot2.png)

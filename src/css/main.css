@@ -1,4 +1,7 @@
-/* ===== CSS CUSTOM PROPERTIES (black & white theme) ===== */
+
+/* alle stijlen ) kleuren en layout ! */
+/* css custom properties ( black & white theme ) */
+
 :root {
   --bg-primary: #050505;
   --bg-secondary: #0f0f0f;
@@ -40,7 +43,7 @@
   font-size: 16px;
 }
 
-/* ===== RESET & BASE ===== */
+/* reset and base */
 *,
 *::before,
 *::after {
@@ -82,12 +85,14 @@ a {
   text-decoration: none;
 }
 
-/* ===== UTILITY ===== */
+/* utility */
+
 .hidden {
   display: none !important;
 }
 
-/* ===== NAVBAR ===== */
+/* navbar */
+
 .navbar {
   position: fixed;
   top: 0;
@@ -132,7 +137,8 @@ a {
   letter-spacing: -0.5px;
 }
 
-/* ===== SEARCH FORM ===== */
+/* search form */
+
 .search-form {
   flex: 1;
   max-width: 540px;
@@ -179,7 +185,8 @@ a {
   flex-shrink: 0;
 }
 
-/* ===== BUTTONS ===== */
+/* buttons */
+
 .btn {
   display: inline-flex;
   align-items: center;
@@ -253,7 +260,9 @@ a {
   justify-content: center;
 }
 
-/* ===== BADGE ===== */
+/* badge */
+
+
 .badge {
   display: inline-flex;
   align-items: center;
@@ -268,7 +277,8 @@ a {
   font-weight: 700;
 }
 
-/* ===== APP LAYOUT ===== */
+/* app layout */
+
 .app-layout {
   display: grid;
   grid-template-columns: var(--sidebar-w) 1fr;
@@ -276,7 +286,9 @@ a {
   margin-top: var(--navbar-h);
 }
 
-/* ===== SIDEBAR ===== */
+/* sidebar */
+
+
 .sidebar {
   background: var(--bg-secondary);
   border-right: 1px solid var(--border);
@@ -302,7 +314,8 @@ a {
   color: var(--text-primary);
 }
 
-/* ===== FILTERS ===== */
+/* filters */
+
 .filter-group {
   display: flex;
   flex-direction: column;
@@ -371,7 +384,9 @@ a {
   cursor: pointer;
 }
 
-/* ===== MAIN CONTENT ===== */
+/* main content wtf */
+
+
 .main-content {
   padding: 24px;
   display: flex;
@@ -380,7 +395,8 @@ a {
   min-width: 0;
 }
 
-/* ===== TOOLBAR ===== */
+/* toolbar */
+
 .toolbar {
   display: flex;
   align-items: center;
@@ -412,7 +428,8 @@ a {
   color: var(--text-primary);
 }
 
-/* ===== VIEW TOGGLE ===== */
+/* view toggle */
+
 .view-toggle {
   display: flex;
   background: var(--bg-card);
@@ -448,7 +465,8 @@ a {
   color: var(--accent);
 }
 
-/* ===== LOADING STATE ===== */
+/* loading */
+
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -472,7 +490,8 @@ a {
   to { transform: rotate(360deg); }
 }
 
-/* ===== ERROR STATE ===== */
+/* error state */
+
 .error-container {
   display: flex;
   flex-direction: column;
@@ -494,14 +513,16 @@ a {
   text-align: center;
 }
 
-/* ===== GAMES GRID ===== */
+/* games grid */
+
 .games-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 16px;
 }
 
-/* ===== LOAD MORE TRIGGER ===== */
+/* load more ( trigger trigger trigger trigger) */
+
 .load-more-trigger {
   display: flex;
   justify-content: center;
@@ -514,7 +535,8 @@ a {
   height: 32px;
 }
 
-/* ===== MODAL ===== */
+/* modal */
+
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -570,7 +592,9 @@ a {
   padding: 24px;
 }
 
-/* ===== FAVORITES PANEL ===== */
+/* favorites panel */
+
+
 .panel-overlay {
   position: fixed;
   inset: 0;
@@ -619,7 +643,9 @@ a {
   gap: 12px;
 }
 
-/* ===== TOAST ===== */
+/* toast */
+
+
 .toast-container {
   position: fixed;
   bottom: 24px;
@@ -648,7 +674,9 @@ a {
 .toast.success { border-left-color: var(--success); }
 .toast.danger  { border-left-color: var(--danger); }
 
-/* ===== ANIMATIONS ===== */
+/* animations */
+
+
 @keyframes fadeIn    { from { opacity: 0; } to { opacity: 1; } }
 @keyframes slideUp   { from { transform: translateY(24px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 @keyframes slideLeft { from { transform: translateX(100%); } to { transform: translateX(0); } }
@@ -658,7 +686,9 @@ a {
 }
 @keyframes fadeOut { to { opacity: 0; transform: translateX(40px); } }
 
-/* ===== REMOVE NUMBER INPUT SPINNERS ===== */
+/* remove number input spinners */
+
+
 input[type='number']::-webkit-outer-spin-button,
 input[type='number']::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -668,7 +698,9 @@ input[type='number'] {
   -moz-appearance: textfield;
 }
 
-/* ===== RESPONSIVE ===== */
+/* responsive */
+
+
 @media (max-width: 768px) {
   .app-layout {
     grid-template-columns: 1fr;

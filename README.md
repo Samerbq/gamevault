@@ -142,4 +142,5 @@ MDN Web Docs             →  LocalStorage
 Vite Documentation       →  vitejs.dev
 Inter font               →  fonts.google.com
 AI assistance            →  Claude ( Anthropic ) — code generation and structure
+AI chatlog               →  Ai chat log claude.pdf  ( see repo )
 ```

@@ -53,7 +53,7 @@ to build for production run : npm run build
 \- \- \-
 
 
-$\color{green}{\texttt{Technical Requirements — Implementation Map}}$
+$\color{green}{\texttt{Technical Requirements / Implementation Map}}$
 
 
 $\color{green}{\texttt{1. DOM Manipulation}}$

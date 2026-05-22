@@ -1,6 +1,7 @@
 /* game card grid view */
 /* style van kaarten - tabel en modal */
 
+/* game card , hover en cart image container aan claude gevraagd zie Ai chat lot ) */
 
 .game-card {
   background: var(--bg-card);
@@ -13,6 +14,9 @@
   flex-direction: column;
   position: relative;
 }
+
+
+
 
 .game-card:hover {
   transform: translateY(-4px);

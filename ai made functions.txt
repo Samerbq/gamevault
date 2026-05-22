@@ -1,0 +1,17 @@
+Uit api.js:
+
+apiFetch
+
+getCurrentDate
+
+Uit ui.js:
+
+renderDetailModal
+
+handleSortChange
+
+Daarnaast heeft de AI geholpen met :
+
+in html structuur : navigatie en de scroll-sentine voor infinite scroll
+
+css : grid en dark mode styling ( in main.css en components.css ).

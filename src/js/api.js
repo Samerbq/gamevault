@@ -1,5 +1,3 @@
-// hier halen we data op van rawg : ) ez
-
 
 import { API_KEY, BASE_URL, PAGE_SIZE } from './config.js';
 const buildUrl = (endpoint, params = {}) => {
